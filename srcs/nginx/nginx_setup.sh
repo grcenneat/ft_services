@@ -8,7 +8,7 @@ mv localhost-nginx.crt /etc/nginx/ssl
 
 
 mkdir -p /run/nginx
-mkdir -p /usr/share/nginx/html
-echo "<h1>THIS IS FT_SERVICES INDEX.HTML PAGE</h1>" >> /usr/share/nginx/html/index.html
+# mkdir -p /usr/share/nginx/html		# root directory 변경을 위해 잠시 주석처리
+echo "<h1>THIS IS FT_SERVICES NGINX INDEX.HTML</h1>" >> /var/www/index.html
 
 /usr/sbin/nginx -g "daemon off;"
