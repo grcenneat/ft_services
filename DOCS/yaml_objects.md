@@ -2,6 +2,7 @@
 * * *
 #### Basic informations
 * * *
+아래 4개는 필수로 명시해야하는 항목이다.
 * `apiVersion`  
 apiVersion - 해당 object를 생성하는데 어떤 버전의 Kubernetes API를 사용할 것인지 명시.
 * `kind`  
@@ -38,3 +39,11 @@ apiVersion - 해당 object를 생성하는데 어떤 버전의 Kubernetes API를
 	+ `selector` : 서비스를 정의할 때 `selector.app: myapp` 인 애들끼리 묶어서 서비스한다.
 	+ `ports`: 포트가 두 개 일땐 포트 이름을 명시해줘야함.
         - 포트는 TCP를 이용하되, 서비스는 80 포트로 서비스를 하되(`port: 80`), 서비스의 80 포트의 요청을 컨테이너의 9376 포트로 연결(`targetport: 9376`)해서 서비스를 제공한다.
+
+* * *
+* PersistentVolumeClaim
+	+ `spec.accessModes` : Pod의 접근 제어를 합니다. 볼륨의 읽기/쓰기에 관한 옵션을 지정합니다.
+		- `ReadWriteOnce` : 하나의 Pod에서만 읽고 쓸 수 있습니다. 하나의 노드가 볼륨을 읽기/쓰기 가능하게 마운트할 수 있음.
+		- `ReadOnlyMany` : 여러개의 Pod에서 읽을 수 있습니다.
+		- `ReadWriteMany` : 여러개의 Pod에서 읽고 쓸 수 있습니다.
+	+ `spec.resources` : 얼만큼의 자원을 사용할 것인지에 대한 요청(request)을 입력합니다. `pv`에서 설정한 크기보다 작아야함.
