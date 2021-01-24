@@ -19,3 +19,10 @@ echo "\033[32mmysql image build\033[0m"
 docker build -t mysql:latest .
 echo "\033[36mmysql deployment\033[0m"
 kubectl apply -f mysql.yaml
+
+# phpmyadmin
+cd ../phpmyadmin
+echo "phpmyadmin image build"
+docker build -t phpmyadmin:latest .
+echo "phpmyadmin deployment"
+kubectl apply -f phpmyadmin.yaml
