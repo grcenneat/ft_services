@@ -21,15 +21,6 @@ spec:
       - image: mysql:latest
         imagePullPolicy: Never
         name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: pass
-        - name: MYSQL_DATABASE
-          value: wordpress
-        - name: MYSQL_USER
-          value: user
-        - name: MYSQL_PASSWORD
-          value: pass
         ports:
         - containerPort: 3306
           name: mysql

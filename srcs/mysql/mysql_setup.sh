@@ -3,7 +3,7 @@
 mkdir -p /run/mysqld
 
 sleep 5
-echo "\033[32minstalling MySQL database...\033[0m"
+echo "\033[32minitialize MySQL database...\033[0m"
 mysql_install_db --user=root > /dev/null
 
 # create wordpress table and give permissions

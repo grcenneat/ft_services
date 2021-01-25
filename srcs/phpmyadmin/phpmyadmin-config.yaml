@@ -5,7 +5,7 @@ metadata:
     app: phpmyadmin
   name: phpmyadmin
   annotations:
-    metallb.universe.tf/address-pool: default
+    metallb.universe.tf/allow-shared-ip: shared
 spec:
   ports:
   - name: phpmyadmin
@@ -15,6 +15,7 @@ spec:
   selector:
     app: phpmyadmin
   type: LoadBalancer
+  loadBalancerIP: MINIKUBE_IP
 
 ---
 

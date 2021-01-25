@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  replicas: 1
+  template:
+    metadata:
+      name: wordpress
+      labels:
+        app: wordpress
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5050
+          env:
+          - name: WP_HOST
+            value: "http://MINIKUBE_IP:5050"
+          - name: WP_SITEURL
+            value: "http://MINIKUBE_IP:5050"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  selector:
+    app: wordpress
+  type: LoadBalancer
+  loadBalancerIP: MINIKUBE_IP
+  ports:
+    - port: 5050
+      name: wordpress
+      targetPort: 5050
