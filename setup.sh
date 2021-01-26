@@ -24,9 +24,9 @@ kubectl apply -f mysql.yaml
 # phpmyadmin
 cd ../phpmyadmin
 sed "s/MINIKUBE_IP/$MINIKUBE_IP/g" ./phpmyadmin-config.yaml > ./phpmyadmin.yaml
-echo "phpmyadmin image build"
+echo "\033[32mphpmyadmin image build\033[0m"
 docker build -t phpmyadmin:latest .
-echo "phpmyadmin deployment"
+echo "\033[36mphpmyadmin deployment\033[0m"
 kubectl apply -f phpmyadmin.yaml
 
 # wordpress

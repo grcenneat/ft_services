@@ -21,6 +21,9 @@ spec:
       containers:
       - image: nginx:latest
         imagePullPolicy: Never
+        env:
+        - name: PMA_IP
+          value: MINIKUBE_IP
         name: nginx
         ports:
         - containerPort: 80
