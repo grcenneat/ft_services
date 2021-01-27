@@ -23,9 +23,9 @@ spec:
             - containerPort: 5050
           env:
           - name: WP_HOST
-            value: "http://MINIKUBE_IP:5050"
+            value: "http://192.168.99.100:5050"
           - name: WP_SITEURL
-            value: "http://MINIKUBE_IP:5050"
+            value: "http://192.168.99.100:5050"
 ---
 apiVersion: v1
 kind: Service
@@ -39,7 +39,7 @@ spec:
   selector:
     app: wordpress
   type: LoadBalancer
-  loadBalancerIP: MINIKUBE_IP
+  loadBalancerIP: 192.168.99.100
   ports:
     - port: 5050
       name: wordpress

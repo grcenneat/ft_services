@@ -22,8 +22,6 @@ spec:
       - image: nginx:latest
         imagePullPolicy: Never
         env:
-        - name: PMA_IP
-          value: MINIKUBE_IP
         - name: SSH_USERNAME
           valueFrom:
             secretKeyRef:
@@ -50,7 +48,7 @@ metadata:
     app: nginx
 spec:
   type: LoadBalancer
-  loadBalancerIP: MINIKUBE_IP
+  loadBalancerIP: 192.168.99.100
   selector:
     app: nginx
   ports:
