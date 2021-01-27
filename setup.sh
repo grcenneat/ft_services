@@ -12,6 +12,7 @@ cd ./srcs/nginx
 sed "s/MINIKUBE_IP/$MINIKUBE_IP/g" ./nginx-config.yaml > ./nginx.yaml
 echo "\033[32mnginx image build\033[0m"
 docker build -t nginx:latest .	> /dev/null
+kubectl apply -f ./nginx-secret.yaml
 kubectl apply -f ./nginx.yaml
 
 # mysql

@@ -7,8 +7,13 @@ mv localhost-nginx.key /etc/nginx/ssl
 mv localhost-nginx.crt /etc/nginx/ssl
 sed -i "s/PMA_IP/${PMA_IP}/g" /etc/nginx/conf.d/default.conf
 
+ssh-keygen -A
+adduser --disabled-password ${SSH_USERNAME}
+echo "${SSH_USERNAME}:${SSH_PASSWORD}" | chpasswd
+
 mkdir -p /run/nginx
 # mkdir -p /usr/share/nginx/html		# root directory 변경을 위해 잠시 주석처리
-echo "<h1>THIS IS FT_SERVICES NGINX INDEX.HTML</h1>" >> /var/www/index.html
+echo "<h1>THIS IS hjung's FT_SERVICES NGINX INDEX.HTML</h1>" >> /var/www/index.html
 
+/usr/sbin/sshd
 /usr/sbin/nginx -g "daemon off;"

@@ -24,10 +24,21 @@ spec:
         env:
         - name: PMA_IP
           value: MINIKUBE_IP
+        - name: SSH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: ssh-secret
+              key: username
+        - name: SSH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ssh-secret
+              key: password
         name: nginx
         ports:
         - containerPort: 80
         - containerPort: 443
+        - containerPort: 22
 ---
 apiVersion: v1
 kind: Service
@@ -49,5 +60,9 @@ spec:
     targetPort: 80
   - name: https
     port: 443
-    protocol : TCP
+    protocol: TCP
     targetPort: 443
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 22
