@@ -22,7 +22,7 @@ COPY wordpress_setup.sh /usr/sbin/wordpress_setup.sh
 RUN chmod +x /usr/sbin/wordpress_setup.sh && \
 	mkdir -p /run/nginx
 
-# COPY wordpress.sql /run/nginx/wordpress.sql
+COPY wordpress.sql /run/nginx/wordpress.sql
 
 CMD /bin/sh "/usr/sbin/wordpress_setup.sh" && php-fpm7 \
 		&& nginx -g "daemon off;"

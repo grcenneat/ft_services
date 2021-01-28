@@ -1,0 +1,6 @@
+kubectl exec deploy/mysql -- pkill mysqld
+kubectl exec deploy/nginx -- pkill nginx
+kubectl exec deploy/influxdb -- pkill influxd
+kubectl exec deploy/grafana -- pkill grafana
+kubectl exec deploy/ftps -- pkill vsftpd
+kubectl exec deploy/nginx -- pkill sshd

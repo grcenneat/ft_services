@@ -20,4 +20,4 @@ mkdir -p /etc/nginx/sites-enabled/
 # service php7.3-fpm start
 # tail -f /dev/null
 
-# mysql -hmysql -Dwordpress -uuser -ppass < /run/nginx/wordpress.sql
+mysql -hmysql -Dwordpress -uuser -ppass < /run/nginx/wordpress.sql
