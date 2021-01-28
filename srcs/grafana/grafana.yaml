@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana
+        imagePullPolicy: Never
+        volumeMounts:
+        - name: grafana-config
+          mountPath: /usr/share/grafana/conf/custom.ini
+          subPath: custom.ini
+        - name: provisioning
+          mountPath: /usr/share/grafana/conf/provisioning
+      volumes:
+      - name: grafana-config
+        configMap:
+          name: grafana-config
+          items:
+          - key: custom.ini
+            path: custom.ini
+      - name: provisioning
+        configMap:
+          name: grafana-config
+          items:
+          - key: dashboards.yml
+            path: dashboards/dashboards.yml
+          - key: datasources.yml
+            path: datasources/datasources.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.99.100
+  selector:
+    app: grafana
+  ports:
+  - port: 3000
+    name: grafana
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+data:
+  custom.ini: |
+    [server]
+    root_url = %(protocol)s://%(domain)s/
+    [auth.proxy]
+    enabled = false
+    header_name = X-WEBAUTH-USER
+    header_property = username
+    auto_sign_up = true
+    sync_ttl = 60
+    whitelist =
+    headers =
+    enable_login_token = false
+  datasources.yml: |
+    apiVersion: 1
+    datasources:
+    - name: InfluxDB
+      type: influxdb
+      access: proxy
+      database: telegraf
+      isDefault: true
+      user: admin
+      password: password
+      url: http://influxdb:8086
+  dashboards.yml: |
+    apiVersion: 1
+    providers:
+    - name: 'influxdb'
+      orgId: 1
+      folder: ''
+      folderUid: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      updateIntervalSeconds: 10
+      allowUiUpdates: true
+      options:
+        path: /usr/share/grafana/public/dashboards
