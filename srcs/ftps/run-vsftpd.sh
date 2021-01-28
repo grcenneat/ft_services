@@ -12,6 +12,4 @@ adduser -D $FTP_USER -h /var/ftp/user
 chown $FTP_USER:$FTP_USER /var/ftp/user
 echo "$FTP_USER:$FTP_PASS" | /usr/sbin/chpasswd
 
-# sed -i "s/pasv_address=.*/pasv_address=$(cat </etc/vsftpd/vsftpd.addr)/" /etc/vsftpd/vsftpd.conf
-
 vsftpd /etc/vsftpd/vsftpd.conf

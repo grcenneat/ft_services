@@ -15,11 +15,9 @@ ENV FTP_USER=user \
     PASV_MAX_PORT=20003 \
 	NODE_ADDRESS=${PASV}
 
-CMD [ "mkdir -p /etc/vsftpd" ]
 COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
 COPY run-vsftpd.sh /usr/sbin/
 RUN chmod +x /usr/sbin/run-vsftpd.sh
 
 EXPOSE 20 21 20000-20004
 ENTRYPOINT [ "/usr/sbin/run-vsftpd.sh" ]
-# CMD tail -f /dev/null

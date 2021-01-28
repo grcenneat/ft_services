@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf
+  labels:
+    app: telegraf
+spec:
+  selector:
+    matchLabels:
+      app: telegraf
+  template:
+    metadata:
+      labels:
+        app: telegraf
+    spec:
+      containers:
+        - name: telegraf
+          image: telegraf:latest
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: telegraf-config
+              subPath: telegraf.conf
+              mountPath: /etc/telegraf.conf
+              readOnly: true
+            - name: docker-unix-socket
+              mountPath: /var/run/docker.sock
+          envFrom:
+              - secretRef:
+                  name: influxdb-secret
+      volumes:
+        - name: telegraf-config
+          configMap:
+            name: telegraf
+        - name: docker-unix-socket
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf
+  labels:
+    app: telegraf
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      logfile = "telegraf.log"
+      hostname = ""
+      omit_hostname = true
+    [[outputs.influxdb]]
+      ## Multiple URLs can be specified for a single cluster, only ONE of the
+      ## urls will be written to each interval.
+      urls = ["http://influxdb:8086"]
+      ## The target database for metrics; will be created as needed.
+      database = "telegraf"
+      ## If true, no CREATE DATABASE queries will be sent.  Set to true when using
+      ## Telegraf with a user without permissions to create databases or when the
+      ## database already exists.
+      # skip_database_creation = false
+      # influxdb_secret.yaml와 같게 해주자.
+      username = "admin"
+      password = "password"
+    [[inputs.docker]]
+      ## Docker Endpoint
+      ##   To use TCP, set endpoint = "tcp://[ip]:[port]"
+      ##   To use environment variables (ie, docker-machine), set endpoint = "ENV"
+      endpoint = "unix:///var/run/docker.sock"
+      ## Set to true to collect Swarm metrics(desired_replicas, running_replicas)
+      gather_services = false
+      ## Containers to include and exclude. Collect all if empty. Globs accepted.
+      container_name_include = []
+      timeout = "5s"
+      ## Whether to report for each container per-device blkio (8:0, 8:1...) and
+      ## network (eth0, eth1, ...) stats or not
+      perdevice = true
+      ## Whether to report for each container total blkio and network stats or not
+      total = true
+      ## docker labels to include and exclude as tags.  Globs accepted.
+      ## Note that an empty array for both will include all labels as tags
+      docker_label_include = []
+      ## Which environment variables should we use as a tag
+      tag_env = ["JAVA_HOME", "HEAP_SIZE"]

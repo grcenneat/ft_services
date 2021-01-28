@@ -48,3 +48,10 @@ echo "\033[32minfluxdb image build\033[0m"
 docker build -t influxdb:latest .	> /dev/null
 echo "\033[36minfluxdb deployment\033[0m"
 kubectl apply -f influxdb.yaml
+
+# telegraf
+cd ../telegraf
+echo "\033[32mtelegraf image build\033[0m"
+docker build -t telegraf:latest . > /dev/null
+echo "\033[36mtelegraf deployment\033[0m"
+kubectl apply -f telegraf.yaml
