@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: influxdb-secret
+  labels:
+    app: influxdb
+type: Opaque
+stringData:
+  INFLUXDB_DB: telegraf
+  INFLUXDB_ADMIN_USER: admin
+  INFLUXDB_ADMIN_PASSWORD: password
+  INFLUXDB_USER: user
+  INFLUXDB_USER_PASSWORD: userpassword
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - name: influxdb-pv-claim
+          mountPath: /var/lib/influxdb
+      volumes:
+      - name: influxdb-pv-claim
+        persistentVolumeClaim:
+          claimName: influxdb-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pv-claim
+  labels:
+    app: influxdb
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  selector:
+    app: influxdb
+  ports:
+  - name: influxdb
+    port: 8086
