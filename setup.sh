@@ -30,7 +30,7 @@ kubectl apply -f phpmyadmin.yaml
 # wordpress
 cd ../wordpress
 echo "\033[32mwordpress image build\033[0m"
-docker build -t wordpress:latest .	> /dev/null
+docker build -t wordpress:latest . > /dev/null
 echo "\033[36mwordpress deployment\033[0m"
 kubectl apply -f wordpress.yaml
 
